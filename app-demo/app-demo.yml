@@ -11,7 +11,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels: 
+    matchLabels:
       app: app-demo
   template:
     metadata:
@@ -19,11 +19,11 @@ spec:
         app: app-demo
     spec:
       containers:
-      - name: app-demo
-        image: nginx
-        ports:
-        - name: web
-          containerPort: 80
+        - name: hello-world
+          image: ptm3006/hello-world
+          ports:
+            - name: web
+              containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
@@ -35,11 +35,11 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - name:  http
-    port:  80
-    targetPort: 80
-    nodePort: 30005
-    protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 3000
+      nodePort: 30005
+      protocol: TCP
   selector:
     app: app-demo
 ---
@@ -50,20 +50,20 @@ metadata:
   namespace: app-demo
 spec:
   rules:
-  - host: "app-demo.kienle.xyz"
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: app-demo-svc 
-            port:
-              number: 80
-  # tls:
-  # - hosts:
-  #   - app-demo.kienle.xyz
-  #   secretName: app-demo-tls-secret              
+    - host: "app-demo.kienle.xyz"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-demo-svc
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - app-demo.kienle.xyz
+      secretName: app-demo-tls-secret
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

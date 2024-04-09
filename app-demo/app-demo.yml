@@ -33,12 +33,11 @@ metadata:
   labels:
     app: app-demo
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - name: http
       port: 80
       targetPort: 3000
-      nodePort: 30005
       protocol: TCP
   selector:
     app: app-demo
@@ -50,7 +49,7 @@ metadata:
   namespace: app-demo
 spec:
   rules:
-    - host: "app-demo.kienle.xyz"
+    - host: "jenkins.lunarlobster.tech"
       http:
         paths:
           - path: /
@@ -62,7 +61,7 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - app-demo.kienle.xyz
+        - jenkins.lunarlobster.tech
       secretName: app-demo-tls-secret
 ---
 apiVersion: cert-manager.io/v1
@@ -73,8 +72,8 @@ metadata:
 spec:
   secretName: app-demo-tls-secret
   issuerRef:
-    name: letsencrypt-production
+    name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "app-demo.kienle.xyz"
+  commonName: "jenkins.lunarlobster.tech"
   dnsNames:
-    - "app-demo.kienle.xyz"
+    - "jenkins.lunarlobster.tech"

@@ -47,9 +47,11 @@ kind: Ingress
 metadata:
   name: app-demo-ingress
   namespace: app-demo
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-    - host: "jenkins.lunarlobster.tech"
+    - host: jenkins.lunarlobster.tech
       http:
         paths:
           - path: /
@@ -63,17 +65,17 @@ spec:
     - hosts:
         - jenkins.lunarlobster.tech
       secretName: app-demo-tls-secret
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: app-demo-cert
-  namespace: app-demo
-spec:
-  secretName: app-demo-tls-secret
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-  commonName: "jenkins.lunarlobster.tech"
-  dnsNames:
-    - "jenkins.lunarlobster.tech"
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: app-demo-cert
+#   namespace: app-demo
+# spec:
+#   secretName: app-demo-tls-secret
+#   issuerRef:
+#     name: letsencrypt-prod
+#     kind: ClusterIssuer
+#   commonName: "jenkins.lunarlobster.tech"
+#   dnsNames:
+#     - "jenkins.lunarlobster.tech"
